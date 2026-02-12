@@ -1,0 +1,36 @@
+<% content_for(:title) { "Officials — Admin" } %>
+<%= render "admin/nav" %>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Barangay Officials</h1>
+    <%= link_to "＋ Add Official", new_admin_official_path, class: "px-4 py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-800" %>
+  </div>
+
+  <% if @officials.any? %>
+    <div class="space-y-3">
+      <% @officials.each do |official| %>
+        <div class="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-700 font-bold text-lg">
+              <%= official.name&.first&.upcase || "?" %>
+            </div>
+            <div>
+              <h3 class="font-bold"><%= official.name %></h3>
+              <p class="text-gray-500 text-sm"><%= official.position %></p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <%= link_to "Edit", edit_admin_official_path(official), class: "text-blue-600 text-sm hover:underline" %>
+            <%= button_to "Delete", admin_official_path(official), method: :delete, data: { turbo_confirm: "Remove this official?" }, class: "text-red-500 text-sm hover:underline" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="bg-white border border-gray-200 rounded-lg p-8 text-center text-gray-400">
+      <p class="text-lg mb-2">No officials added yet</p>
+      <p class="text-sm">Add your Punong Barangay, Kagawads, and SK officers.</p>
+    </div>
+  <% end %>
+</div>

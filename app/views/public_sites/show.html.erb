@@ -1,8 +1,9 @@
 <% content_for(:title) { "#{@site.name} — Official Barangay Website" } %>
 
 <!-- Hero Banner -->
-<section class="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-12">
-  <div class="max-w-6xl mx-auto px-4">
+<section class="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-12 relative overflow-hidden">
+  <img src="https://images.unsplash.com/photo-1596452862239-a9a220e996cd?w=1800&q=80" alt="" class="absolute inset-0 w-full h-full object-cover opacity-15">
+  <div class="max-w-6xl mx-auto px-4 relative z-10">
     <div class="md:flex justify-between items-center">
       <div>
         <h2 class="text-3xl md:text-4xl font-bold mb-2">Welcome to <%= @site.name %></h2>

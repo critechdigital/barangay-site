@@ -1,0 +1,29 @@
+<% content_for(:title) { "Transparency Seal — #{@site.name}" } %>
+<%= render "public_sites/nav" %>
+
+<div class="max-w-5xl mx-auto px-4 py-12">
+  <h1 class="text-3xl font-bold mb-4">Transparency Seal</h1>
+  <p class="text-gray-500 mb-8">In compliance with the requirements of Republic Act 9485 (Anti-Red Tape Act) and Section 93 of Republic Act 10155.</p>
+
+  <div class="bg-white border border-gray-200 rounded-lg p-8 space-y-6">
+    <div>
+      <h3 class="font-bold text-lg mb-2">Agency Mandate</h3>
+      <p class="text-gray-600">The Barangay is the basic political unit and serves as the primary planning and implementing unit of government policies, plans, programs, projects, and activities in the community.</p>
+    </div>
+
+    <div>
+      <h3 class="font-bold text-lg mb-2">Organizational Structure</h3>
+      <p class="text-gray-500 text-sm">See <%= link_to "Officials", public_site_officials_path(@site.slug), class: "text-blue-600 hover:underline" %> page.</p>
+    </div>
+
+    <div>
+      <h3 class="font-bold text-lg mb-2">Annual Financial Reports</h3>
+      <p class="text-gray-400 italic">Coming soon — budget documents will be available for download here.</p>
+    </div>
+
+    <div>
+      <h3 class="font-bold text-lg mb-2">Annual Procurement Plan</h3>
+      <p class="text-gray-400 italic">Coming soon.</p>
+    </div>
+  </div>
+</div>

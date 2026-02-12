@@ -1,0 +1,17 @@
+clearance:
+  site: san_antonio
+  name: Barangay Clearance
+  category: Certificates
+  fees: "₱50-100"
+  processing_time: "1 day"
+  requirements: "Valid ID, Cedula"
+  sort_order: 0
+
+indigency:
+  site: san_antonio
+  name: Certificate of Indigency
+  category: Certificates
+  fees: Free
+  processing_time: "1 day"
+  requirements: "Valid ID"
+  sort_order: 1

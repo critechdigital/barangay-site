@@ -1,0 +1,61 @@
+<% content_for(:title) { "Dashboard — BarangaySite" } %>
+
+<div class="min-h-screen bg-gray-50">
+  <!-- Admin Nav -->
+  <nav class="bg-white shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-6">
+        <span class="font-bold text-blue-700">🏘️ BarangaySite</span>
+        <span class="text-gray-300">|</span>
+        <span class="text-sm font-medium text-gray-700"><%= @site&.name || "My Site" %></span>
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+        <% if @site&.published? %>
+          <%= link_to "View Site →", public_site_path(@site.slug), class: "text-green-600 font-medium", target: "_blank" %>
+        <% end %>
+        <%= button_to "Logout", logout_path, method: :delete, class: "text-gray-400 hover:text-gray-600" %>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-8">Dashboard</h1>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-3 gap-6 mb-8">
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div class="text-3xl font-bold text-blue-700"><%= @officials_count %></div>
+        <div class="text-gray-500 text-sm mt-1">Officials</div>
+      </div>
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div class="text-3xl font-bold text-blue-700"><%= @services_count %></div>
+        <div class="text-gray-500 text-sm mt-1">Services</div>
+      </div>
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div class="text-3xl font-bold text-blue-700"><%= @announcements_count %></div>
+        <div class="text-gray-500 text-sm mt-1">Announcements</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <h2 class="text-lg font-bold mb-4">Quick Actions</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <%= link_to admin_announcements_path, class: "bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition text-center" do %>
+        <div class="text-2xl mb-2">📰</div>
+        <div class="text-sm font-medium">Announcements</div>
+      <% end %>
+      <%= link_to basics_setup_path, class: "bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition text-center" do %>
+        <div class="text-2xl mb-2">⚙️</div>
+        <div class="text-sm font-medium">Edit Site Info</div>
+      <% end %>
+      <%= link_to officials_setup_path, class: "bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition text-center" do %>
+        <div class="text-2xl mb-2">👥</div>
+        <div class="text-sm font-medium">Edit Officials</div>
+      <% end %>
+      <%= link_to services_setup_path, class: "bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition text-center" do %>
+        <div class="text-2xl mb-2">📋</div>
+        <div class="text-sm font-medium">Edit Services</div>
+      <% end %>
+    </div>
+  </div>
+</div>

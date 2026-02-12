@@ -1,0 +1,12 @@
+assembly:
+  site: san_antonio
+  title: Barangay Assembly on March 15
+  body: All residents are invited to attend the quarterly barangay assembly.
+  published: true
+  published_at: <%= 1.day.ago %>
+
+draft:
+  site: san_antonio
+  title: Draft Announcement
+  body: This is not published yet.
+  published: false

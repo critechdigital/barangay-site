@@ -1,0 +1,11 @@
+admin:
+  name: Juan Dela Cruz
+  email: juan@example.com
+  password_digest: <%= BCrypt::Password.create("password123") %>
+  role: 0
+
+editor:
+  name: Maria Santos
+  email: maria@example.com
+  password_digest: <%= BCrypt::Password.create("password123") %>
+  role: 1

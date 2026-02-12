@@ -1,0 +1,21 @@
+san_antonio:
+  name: Barangay San Antonio
+  slug: barangay-san-antonio
+  subdomain: san-antonio
+  tagline: A progressive barangay
+  region: NCR
+  province: Metro Manila
+  municipality: Quezon City
+  barangay: San Antonio
+  phone: "(02) 1234-5678"
+  email: brgy.sanantonio@gmail.com
+  address: 123 Main Street, Quezon City
+  office_hours: "Monday-Friday, 8AM-5PM"
+  published: true
+  user: admin
+
+unpublished:
+  name: Barangay Test
+  slug: barangay-test
+  published: false
+  user: editor

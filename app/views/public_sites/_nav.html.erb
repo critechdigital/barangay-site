@@ -1,0 +1,12 @@
+<nav class="bg-white shadow-sm sticky top-0 z-10">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+    <div class="font-bold text-blue-700"><%= @site.name %></div>
+    <div class="flex gap-6 text-sm">
+      <%= link_to "Home", public_site_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
+      <%= link_to "Services", public_site_services_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
+      <%= link_to "Officials", public_site_officials_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
+      <%= link_to "Announcements", public_site_announcements_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
+      <%= link_to "Contact", public_site_contact_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
+    </div>
+  </div>
+</nav>

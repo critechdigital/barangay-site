@@ -1,0 +1,19 @@
+<% content_for(:title) { "Announcements — #{@site.name}" } %>
+<%= render "public_sites/nav" %>
+
+<div class="max-w-5xl mx-auto px-4 py-12">
+  <h1 class="text-3xl font-bold mb-8">Announcements</h1>
+  <% if @announcements.any? %>
+    <div class="space-y-6">
+      <% @announcements.each do |ann| %>
+        <article class="bg-white border border-gray-200 rounded-lg p-6">
+          <h2 class="text-xl font-bold mb-2"><%= ann.title %></h2>
+          <p class="text-gray-400 text-sm mb-3"><%= ann.published_at&.strftime("%B %d, %Y") %></p>
+          <p class="text-gray-700"><%= simple_format(ann.body) %></p>
+        </article>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-gray-400">No announcements yet.</p>
+  <% end %>
+</div>

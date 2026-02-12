@@ -1,0 +1,11 @@
+captain:
+  site: san_antonio
+  name: Pedro Reyes
+  position: Punong Barangay (Captain)
+  sort_order: 0
+
+kagawad1:
+  site: san_antonio
+  name: Ana Garcia
+  position: Barangay Kagawad
+  sort_order: 1

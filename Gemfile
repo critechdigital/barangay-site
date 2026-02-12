@@ -4,8 +4,9 @@ source "https://rubygems.org"
 gem "rails", "~> 8.1.2"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-# Use sqlite3 as the database for Active Record (dev/test), PostgreSQL for production
-gem "sqlite3", ">= 2.1"
+# Use sqlite3 for dev/test, PostgreSQL for production
+gem "sqlite3", ">= 2.1", group: [:development, :test]
+gem "pg", "~> 1.5", group: :production
 
 # Use Active Model has_secure_password
 gem "bcrypt", "~> 3.1.7"

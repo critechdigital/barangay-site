@@ -1,0 +1,24 @@
+databases:
+  - name: barangay-site-db
+    plan: free
+    databaseName: barangay_site
+    user: barangay_site
+
+services:
+  - type: web
+    name: barangay-site
+    plan: free
+    runtime: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: barangay-site-db
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_TO_STDOUT
+        value: "true"

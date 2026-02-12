@@ -108,9 +108,100 @@ announcements_data.each do |data|
   end
 end
 
+# Citizen's Charter — Step-by-step process for Barangay Clearance
+clearance = site.services.find_by(name: "Barangay Clearance")
+if clearance && clearance.service_steps.empty?
+  [
+    { step_number: 1, title: "Proceed to the Barangay Hall Information Desk", description: "Get a queue number and request a Barangay Clearance application form.", responsible_person: "Information Officer", location: "Information Desk, Ground Floor", duration: "2 minutes" },
+    { step_number: 2, title: "Fill out the Application Form", description: "Complete all required fields in the application form. Attach a photocopy of your valid ID.", responsible_person: "Applicant", location: "Waiting Area", duration: "5 minutes" },
+    { step_number: 3, title: "Submit Form and Requirements", description: "Submit the completed form with your valid ID and Community Tax Certificate (Cedula) to the Records Section.", responsible_person: "Records Officer", location: "Records Section, Window 2", duration: "3 minutes" },
+    { step_number: 4, title: "Pay the Processing Fee", description: "Proceed to the Treasurer's Office and pay the required fee. Keep your official receipt.", responsible_person: "Barangay Treasurer", location: "Treasurer's Office, Window 3", duration: "2 minutes", fees: "₱50-100" },
+    { step_number: 5, title: "Wait for Processing", description: "Your clearance will be processed and printed. Please wait for your name to be called.", responsible_person: "Records Staff", location: "Waiting Area", duration: "10-15 minutes" },
+    { step_number: 6, title: "Claim your Barangay Clearance", description: "Present your official receipt and valid ID. Sign the logbook and receive your Barangay Clearance.", responsible_person: "Barangay Secretary", location: "Secretary's Office", duration: "2 minutes" },
+  ].each do |step|
+    clearance.service_steps.create!(step)
+  end
+end
+
+# Citizen's Charter — Indigency
+indigency = site.services.find_by(name: "Certificate of Indigency")
+if indigency && indigency.service_steps.empty?
+  [
+    { step_number: 1, title: "Visit the Barangay Hall", description: "Bring a valid ID and proceed to the Information Desk.", responsible_person: "Information Officer", location: "Information Desk", duration: "2 minutes" },
+    { step_number: 2, title: "Request Certification", description: "State your purpose for the Certificate of Indigency. The officer will verify your residency status.", responsible_person: "Barangay Staff", location: "Records Section", duration: "5 minutes" },
+    { step_number: 3, title: "Verification by Kagawad", description: "A barangay kagawad will verify and certify your indigency status.", responsible_person: "Barangay Kagawad", location: "Kagawad's Office", duration: "5 minutes" },
+    { step_number: 4, title: "Claim your Certificate", description: "The certificate will be prepared and signed by the Punong Barangay. No fee is charged.", responsible_person: "Barangay Secretary", location: "Secretary's Office", duration: "10 minutes" },
+  ].each do |step|
+    indigency.service_steps.create!(step)
+  end
+end
+
+# Citizen's Charter — Blotter
+blotter = site.services.find_by(name: "Blotter / Incident Report")
+if blotter && blotter.service_steps.empty?
+  [
+    { step_number: 1, title: "Proceed to the Barangay Peace and Order Desk", description: "Report to the duty tanod or peace and order officer.", responsible_person: "Barangay Tanod", location: "Peace & Order Desk", duration: "Immediate" },
+    { step_number: 2, title: "Narrate the Incident", description: "Provide a detailed account of the incident. The officer will record it in the barangay blotter.", responsible_person: "Peace & Order Officer", location: "Peace & Order Office", duration: "10-15 minutes" },
+    { step_number: 3, title: "Review and Sign the Blotter Entry", description: "Read the blotter entry for accuracy. Sign the blotter logbook.", responsible_person: "Complainant", location: "Peace & Order Office", duration: "5 minutes" },
+    { step_number: 4, title: "Receive Copy of Blotter Report", description: "A certified copy of the blotter report will be provided upon request.", responsible_person: "Barangay Secretary", location: "Secretary's Office", duration: "5 minutes" },
+  ].each do |step|
+    blotter.service_steps.create!(step)
+  end
+end
+
+# Emergency Contacts
+EmergencyContact::COMMON_CONTACTS.each_with_index do |ec, i|
+  site.emergency_contacts.find_or_create_by!(name: ec[:name]) do |c|
+    c.phone = ec[:phone]
+    c.category = ec[:category]
+    c.sort_order = i
+  end
+end
+
+# Local emergency contacts
+local_contacts = [
+  { name: "Barangay San Isidro Tanod Hotline", phone: "(02) 8123-9999", category: "Barangay", sort_order: 20 },
+  { name: "Quezon City Police Station 6", phone: "(02) 8924-1720", category: "Police (PNP)", sort_order: 21 },
+  { name: "QC Fire Station - District 2", phone: "(02) 8924-1811", category: "Fire (BFP)", sort_order: 22 },
+  { name: "QC General Hospital", phone: "(02) 8426-6262", category: "Hospital / Health", sort_order: 23 },
+  { name: "Quezon City DRRMO", phone: "(02) 8988-7928", category: "Rescue / MDRRMO", sort_order: 24 },
+  { name: "Quezon City Hall", phone: "(02) 8988-4242", category: "Municipal / City Hall", sort_order: 25 },
+]
+
+local_contacts.each do |data|
+  site.emergency_contacts.find_or_create_by!(name: data[:name]) do |c|
+    c.phone = data[:phone]
+    c.category = data[:category]
+    c.sort_order = data[:sort_order]
+  end
+end
+
+# Documents
+documents_data = [
+  { title: "Annual Investment Plan FY 2026", category: "Annual Investment Plan", description: "Approved barangay investment plan for fiscal year 2026", published: true, sort_order: 0 },
+  { title: "Statement of Receipts & Expenditures Q4 2025", category: "Statement of Receipts & Expenditures", description: "Financial report for October-December 2025", published: true, sort_order: 1 },
+  { title: "Barangay Clearance Application Form", category: "Downloadable Forms", description: "Application form for barangay clearance", published: true, sort_order: 2 },
+  { title: "Business Clearance Application Form", category: "Downloadable Forms", description: "Application form for barangay business clearance", published: true, sort_order: 3 },
+  { title: "Complaint / Blotter Form", category: "Downloadable Forms", description: "Standard form for filing a barangay complaint", published: true, sort_order: 4 },
+  { title: "Barangay Ordinance No. 2025-001", category: "Barangay Ordinances", description: "Ordinance on waste management and segregation", published: true, sort_order: 5 },
+  { title: "Barangay Resolution No. 2025-015", category: "Barangay Resolutions", description: "Resolution adopting the Annual Investment Plan", published: true, sort_order: 6 },
+]
+
+documents_data.each do |data|
+  site.documents.find_or_create_by!(title: data[:title]) do |d|
+    d.category = data[:category]
+    d.description = data[:description]
+    d.published = data[:published]
+    d.sort_order = data[:sort_order]
+  end
+end
+
 puts "Demo data seeded!"
 puts "  User: demo@barangaysite.ph / demo1234"
 puts "  Site: /sites/barangay-san-isidro"
 puts "  Officials: #{site.officials.count}"
 puts "  Services: #{site.services.count}"
+puts "  Service Steps: #{ServiceStep.count}"
 puts "  Announcements: #{site.announcements.count}"
+puts "  Emergency Contacts: #{site.emergency_contacts.count}"
+puts "  Documents: #{site.documents.count}"

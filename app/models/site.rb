@@ -4,6 +4,9 @@ class Site < ApplicationRecord
   has_many :services, -> { order(:sort_order) }, dependent: :destroy
   has_many :announcements, dependent: :destroy
   has_many :pages, -> { order(:sort_order) }, dependent: :destroy
+  has_many :foi_requests, dependent: :destroy
+  has_many :documents, dependent: :destroy
+  has_many :emergency_contacts, dependent: :destroy
 
   accepts_nested_attributes_for :officials, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :services, allow_destroy: true, reject_if: :all_blank

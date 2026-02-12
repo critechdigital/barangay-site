@@ -1,0 +1,13 @@
+pnp:
+  site: san_antonio
+  name: PNP Hotline
+  phone: "117"
+  category: "Police (PNP)"
+  sort_order: 0
+
+fire:
+  site: san_antonio
+  name: BFP Hotline
+  phone: "(02) 8426-0219"
+  category: "Fire (BFP)"
+  sort_order: 1

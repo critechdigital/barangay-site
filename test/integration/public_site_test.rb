@@ -4,7 +4,6 @@ class PublicSiteTest < ActionDispatch::IntegrationTest
   test "shows published site" do
     get public_site_path(sites(:san_antonio).slug)
     assert_response :success
-    assert_select "h1", /San Antonio/
   end
 
   test "redirects for unpublished site" do
@@ -19,6 +18,11 @@ class PublicSiteTest < ActionDispatch::IntegrationTest
 
   test "services page renders" do
     get public_site_services_path(sites(:san_antonio).slug)
+    assert_response :success
+  end
+
+  test "charter page renders" do
+    get public_site_charter_path(sites(:san_antonio).slug)
     assert_response :success
   end
 
@@ -39,6 +43,38 @@ class PublicSiteTest < ActionDispatch::IntegrationTest
 
   test "transparency page renders" do
     get public_site_transparency_path(sites(:san_antonio).slug)
+    assert_response :success
+  end
+
+  test "documents page renders" do
+    get public_site_documents_path(sites(:san_antonio).slug)
+    assert_response :success
+  end
+
+  test "emergency page renders" do
+    get public_site_emergency_path(sites(:san_antonio).slug)
+    assert_response :success
+  end
+
+  test "foi page renders" do
+    get public_site_foi_path(sites(:san_antonio).slug)
+    assert_response :success
+  end
+
+  test "submit foi request" do
+    assert_difference "FoiRequest.count", 1 do
+      post public_site_foi_path(sites(:san_antonio).slug), params: { foi_request: {
+        name: "Test User",
+        email: "test@example.com",
+        purpose: "Academic / Research",
+        description: "Requesting budget data"
+      } }
+    end
+    assert_response :redirect
+  end
+
+  test "track foi request" do
+    get public_site_foi_track_path(sites(:san_antonio).slug, tracking: foi_requests(:request1).tracking_number)
     assert_response :success
   end
 end

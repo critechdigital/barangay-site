@@ -1,48 +1,95 @@
 <% content_for(:title) { "#{@site.name} — Official Barangay Website" } %>
 
-<!-- Nav -->
-<nav class="bg-white shadow-sm sticky top-0 z-10">
-  <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-    <div class="font-bold text-blue-700"><%= @site.name %></div>
-    <div class="flex gap-6 text-sm">
-      <%= link_to "Home", public_site_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
-      <%= link_to "Services", public_site_services_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
-      <%= link_to "Officials", public_site_officials_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
-      <%= link_to "Announcements", public_site_announcements_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
-      <%= link_to "Contact", public_site_contact_path(@site.slug), class: "text-gray-600 hover:text-blue-700" %>
+<!-- Hero Banner -->
+<section class="bg-gradient-to-r from-blue-900 to-blue-800 text-white py-12">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="md:flex justify-between items-center">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-2">Welcome to <%= @site.name %></h2>
+        <% if @site.tagline.present? %>
+          <p class="text-blue-200 text-lg"><%= @site.tagline %></p>
+        <% end %>
+        <p class="text-blue-300 text-sm mt-2">
+          <%= [@site.barangay, @site.municipality, @site.province, @site.region].compact_blank.join(", ") %>
+        </p>
+      </div>
+      <div class="mt-6 md:mt-0 flex gap-3">
+        <%= link_to "Citizen's Charter →", public_site_charter_path(@site.slug), class: "px-5 py-3 bg-yellow-500 text-blue-900 font-bold rounded-lg text-sm hover:bg-yellow-400" %>
+        <%= link_to "Services", public_site_services_path(@site.slug), class: "px-5 py-3 bg-white/10 text-white font-medium rounded-lg text-sm hover:bg-white/20 border border-white/30" %>
+      </div>
     </div>
-  </div>
-</nav>
-
-<!-- Hero -->
-<section class="bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 text-white py-20">
-  <div class="max-w-4xl mx-auto text-center px-4">
-    <h1 class="text-4xl font-extrabold mb-4"><%= @site.name %></h1>
-    <% if @site.tagline.present? %>
-      <p class="text-xl text-blue-100 mb-4"><%= @site.tagline %></p>
-    <% end %>
-    <p class="text-blue-200">
-      <%= [@site.barangay, @site.municipality, @site.province, @site.region].compact_blank.join(", ") %>
-    </p>
   </div>
 </section>
 
-<!-- Quick Services -->
-<% if @services.any? %>
-<section class="py-12 bg-white">
-  <div class="max-w-5xl mx-auto px-4">
-    <h2 class="text-2xl font-bold mb-6">Our Services</h2>
+<!-- Quick Stats Bar -->
+<section class="bg-blue-50 border-b border-blue-100">
+  <div class="max-w-6xl mx-auto px-4 py-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+      <div>
+        <div class="text-2xl font-bold text-blue-800"><%= @site.services.count %></div>
+        <div class="text-xs text-gray-500 uppercase">Services Offered</div>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-blue-800"><%= @site.officials.count %></div>
+        <div class="text-xs text-gray-500 uppercase">Elected Officials</div>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-blue-800"><%= @site.announcements.published.count %></div>
+        <div class="text-xs text-gray-500 uppercase">Announcements</div>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-blue-800"><%= @site.documents.published.count %></div>
+        <div class="text-xs text-gray-500 uppercase">Public Documents</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Latest Announcements -->
+<% if @announcements.any? %>
+<section class="py-10">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-blue-900">📰 Latest Announcements</h2>
+      <%= link_to "View All →", public_site_announcements_path(@site.slug), class: "text-sm text-blue-600 hover:underline" %>
+    </div>
     <div class="grid md:grid-cols-3 gap-4">
+      <% @announcements.each do |ann| %>
+        <article class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
+          <div class="p-5">
+            <p class="text-xs text-gray-400 mb-2"><%= ann.published_at&.strftime("%B %d, %Y") %></p>
+            <h3 class="font-bold text-sm mb-2"><%= ann.title %></h3>
+            <p class="text-gray-600 text-xs line-clamp-3"><%= truncate(ann.body, length: 150) %></p>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<!-- Services Quick Access -->
+<% if @services.any? %>
+<section class="py-10 bg-gray-50">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-blue-900">📋 Barangay Services</h2>
+      <%= link_to "Full Citizen's Charter →", public_site_charter_path(@site.slug), class: "text-sm text-blue-600 hover:underline" %>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
       <% @services.each do |service| %>
-        <div class="border border-gray-200 rounded-lg p-4">
-          <h3 class="font-bold text-sm"><%= service.name %></h3>
-          <p class="text-gray-500 text-xs mt-1">Fee: <%= service.fees %> · <%= service.processing_time %></p>
+        <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition">
+          <h3 class="font-bold text-sm text-blue-900"><%= service.name %></h3>
+          <div class="mt-2 flex gap-3 text-xs text-gray-500">
+            <span>💰 <%= service.fees %></span>
+            <span>⏱ <%= service.processing_time %></span>
+          </div>
         </div>
       <% end %>
     </div>
     <% if @site.services.count > 6 %>
-      <div class="mt-4">
-        <%= link_to "View all services →", public_site_services_path(@site.slug), class: "text-blue-600 text-sm hover:underline" %>
+      <div class="text-center mt-4">
+        <%= link_to "View all #{@site.services.count} services →", public_site_services_path(@site.slug), class: "text-sm text-blue-600 hover:underline" %>
       </div>
     <% end %>
   </div>
@@ -51,13 +98,16 @@
 
 <!-- Officials -->
 <% if @officials.any? %>
-<section class="py-12 bg-gray-50">
-  <div class="max-w-5xl mx-auto px-4">
-    <h2 class="text-2xl font-bold mb-6">Barangay Officials</h2>
+<section class="py-10">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold text-blue-900">👥 Barangay Officials</h2>
+      <%= link_to "View All →", public_site_officials_path(@site.slug), class: "text-sm text-blue-600 hover:underline" %>
+    </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <% @officials.each do |official| %>
-        <div class="bg-white rounded-lg p-4 text-center shadow-sm">
-          <div class="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center text-blue-700 text-xl font-bold">
+        <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+          <div class="w-14 h-14 bg-blue-900 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-lg font-bold">
             <%= official.name&.first&.upcase || "?" %>
           </div>
           <h3 class="font-bold text-sm"><%= official.name %></h3>
@@ -68,52 +118,3 @@
   </div>
 </section>
 <% end %>
-
-<!-- Announcements -->
-<% if @announcements.any? %>
-<section class="py-12 bg-white">
-  <div class="max-w-5xl mx-auto px-4">
-    <h2 class="text-2xl font-bold mb-6">Latest Announcements</h2>
-    <div class="space-y-4">
-      <% @announcements.each do |ann| %>
-        <div class="border-l-4 border-blue-500 pl-4">
-          <h3 class="font-bold"><%= ann.title %></h3>
-          <p class="text-gray-600 text-sm mt-1"><%= truncate(ann.body, length: 200) %></p>
-          <p class="text-gray-400 text-xs mt-2"><%= ann.published_at&.strftime("%B %d, %Y") %></p>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</section>
-<% end %>
-
-<!-- Contact -->
-<section class="py-12 bg-gray-50">
-  <div class="max-w-5xl mx-auto px-4">
-    <h2 class="text-2xl font-bold mb-6">Contact Us</h2>
-    <div class="grid md:grid-cols-2 gap-8">
-      <div class="space-y-3 text-sm">
-        <% if @site.address.present? %>
-          <p>📍 <strong>Address:</strong> <%= @site.address %></p>
-        <% end %>
-        <% if @site.phone.present? %>
-          <p>📞 <strong>Phone:</strong> <%= @site.phone %></p>
-        <% end %>
-        <% if @site.email.present? %>
-          <p>📧 <strong>Email:</strong> <%= @site.email %></p>
-        <% end %>
-        <% if @site.office_hours.present? %>
-          <p>🕐 <strong>Office Hours:</strong> <%= @site.office_hours %></p>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
-<footer class="bg-gray-900 text-gray-400 py-6">
-  <div class="max-w-6xl mx-auto px-4 text-center text-sm">
-    <p>&copy; <%= Date.current.year %> <%= @site.name %>. All rights reserved.</p>
-    <p class="mt-1">Powered by <a href="/" class="text-blue-400 hover:underline">BarangaySite</a> — A CriTech Digital Product</p>
-  </div>
-</footer>

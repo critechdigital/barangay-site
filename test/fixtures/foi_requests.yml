@@ -1,0 +1,9 @@
+request1:
+  site: san_antonio
+  name: Maria Santos
+  email: maria@example.com
+  purpose: Academic / Research
+  description: Requesting budget documents for 2025
+  tracking_number: FOI-1-20260210-ABC123
+  status: 0
+  received_at: <%= 2.days.ago %>

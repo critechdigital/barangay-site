@@ -1,29 +1,107 @@
 <% content_for(:title) { "Transparency Seal — #{@site.name}" } %>
-<%= render "public_sites/nav" %>
 
-<div class="max-w-5xl mx-auto px-4 py-12">
-  <h1 class="text-3xl font-bold mb-4">Transparency Seal</h1>
-  <p class="text-gray-500 mb-8">In compliance with the requirements of Republic Act 9485 (Anti-Red Tape Act) and Section 93 of Republic Act 10155.</p>
+<div class="bg-blue-50 border-b border-blue-100 py-6">
+  <div class="max-w-6xl mx-auto px-4">
+    <h1 class="text-2xl font-bold text-blue-900">Transparency Seal</h1>
+    <p class="text-gray-600 mt-1">In compliance with <strong>Republic Act No. 9485</strong> and Section 93 of <strong>RA 10155</strong></p>
+  </div>
+</div>
 
-  <div class="bg-white border border-gray-200 rounded-lg p-8 space-y-6">
-    <div>
-      <h3 class="font-bold text-lg mb-2">Agency Mandate</h3>
-      <p class="text-gray-600">The Barangay is the basic political unit and serves as the primary planning and implementing unit of government policies, plans, programs, projects, and activities in the community.</p>
+<div class="max-w-6xl mx-auto px-4 py-8">
+  <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <!-- Seal Header -->
+    <div class="bg-blue-900 text-white p-6 text-center">
+      <div class="w-20 h-20 bg-white/10 rounded-full mx-auto mb-3 flex items-center justify-center text-4xl">🏛</div>
+      <h2 class="text-xl font-bold"><%= @site.name %></h2>
+      <p class="text-blue-200 text-sm"><%= [@site.municipality, @site.province, @site.region].compact_blank.join(", ") %></p>
     </div>
 
-    <div>
-      <h3 class="font-bold text-lg mb-2">Organizational Structure</h3>
-      <p class="text-gray-500 text-sm">See <%= link_to "Officials", public_site_officials_path(@site.slug), class: "text-blue-600 hover:underline" %> page.</p>
-    </div>
+    <div class="divide-y divide-gray-200">
+      <!-- Agency Mandate -->
+      <div class="p-6">
+        <h3 class="font-bold text-blue-900 mb-2">I. Agency Mandate</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          The Barangay is the basic political unit of the Philippines, as stated in Section 384 of
+          Republic Act No. 7160 (Local Government Code of 1991). It serves as the primary planning
+          and implementing unit of government policies, plans, programs, projects, and activities
+          in the community, and as a forum wherein the collective views of the people may be
+          expressed, crystallized and considered.
+        </p>
+      </div>
 
-    <div>
-      <h3 class="font-bold text-lg mb-2">Annual Financial Reports</h3>
-      <p class="text-gray-400 italic">Coming soon — budget documents will be available for download here.</p>
-    </div>
+      <!-- Organizational Structure -->
+      <div class="p-6">
+        <h3 class="font-bold text-blue-900 mb-2">II. Organizational Structure</h3>
+        <p class="text-sm text-gray-600 mb-3">
+          See the complete list of elected and appointed officials:
+          <%= link_to "View Officials →", public_site_officials_path(@site.slug), class: "text-blue-600 hover:underline" %>
+        </p>
+        <div class="bg-gray-50 rounded-lg p-4">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+            <% @site.officials.limit(12).each do |o| %>
+              <div><strong><%= o.name %></strong> — <%= o.position %></div>
+            <% end %>
+          </div>
+        </div>
+      </div>
 
-    <div>
-      <h3 class="font-bold text-lg mb-2">Annual Procurement Plan</h3>
-      <p class="text-gray-400 italic">Coming soon.</p>
+      <!-- Annual Financial Reports -->
+      <div class="p-6">
+        <h3 class="font-bold text-blue-900 mb-2">III. Annual Financial Reports</h3>
+        <% budget_docs = @site.documents.published.by_category("Budget Documents") + @site.documents.published.by_category("Statement of Receipts & Expenditures") %>
+        <% if budget_docs.any? %>
+          <div class="space-y-2">
+            <% budget_docs.each do |doc| %>
+              <div class="flex justify-between items-center bg-gray-50 rounded p-3">
+                <span class="text-sm"><%= doc.title %></span>
+                <% if doc.file_url.present? %>
+                  <%= link_to "📥 Download", doc.file_url, class: "text-blue-600 text-xs hover:underline", target: "_blank" %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-gray-400 text-sm italic">Budget documents will be uploaded here when available.</p>
+        <% end %>
+      </div>
+
+      <!-- Annual Procurement Plan -->
+      <div class="p-6">
+        <h3 class="font-bold text-blue-900 mb-2">IV. Annual Procurement Plan / BIDS and Awards</h3>
+        <% procurement_docs = @site.documents.published.by_category("Procurement / Bidding") %>
+        <% if procurement_docs.any? %>
+          <div class="space-y-2">
+            <% procurement_docs.each do |doc| %>
+              <div class="flex justify-between items-center bg-gray-50 rounded p-3">
+                <span class="text-sm"><%= doc.title %></span>
+                <% if doc.file_url.present? %>
+                  <%= link_to "📥 Download", doc.file_url, class: "text-blue-600 text-xs hover:underline", target: "_blank" %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-gray-400 text-sm italic">Procurement documents will be uploaded here when available.</p>
+        <% end %>
+      </div>
+
+      <!-- Full Disclosure Policy -->
+      <div class="p-6">
+        <h3 class="font-bold text-blue-900 mb-2">V. Full Disclosure Policy</h3>
+        <p class="text-gray-600 text-sm mb-3">
+          In compliance with DILG Memorandum Circular on the Full Disclosure Policy, the following documents are made available for public access:
+        </p>
+        <%= link_to "View All Public Documents →", public_site_documents_path(@site.slug), class: "text-blue-600 text-sm hover:underline" %>
+      </div>
+
+      <!-- Citizen's Charter -->
+      <div class="p-6">
+        <h3 class="font-bold text-blue-900 mb-2">VI. Citizen's Charter</h3>
+        <p class="text-gray-600 text-sm mb-3">
+          Complete guide to barangay services including step-by-step procedures, requirements, fees, and processing times.
+        </p>
+        <%= link_to "View Citizen's Charter →", public_site_charter_path(@site.slug), class: "text-blue-600 text-sm hover:underline" %>
+      </div>
     </div>
   </div>
 </div>

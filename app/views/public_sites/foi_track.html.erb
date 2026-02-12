@@ -1,0 +1,95 @@
+<% content_for(:title) { "Track FOI Request — #{@site.name}" } %>
+
+<div class="bg-blue-50 border-b border-blue-100 py-6">
+  <div class="max-w-6xl mx-auto px-4">
+    <h1 class="text-2xl font-bold text-blue-900">Track FOI Request</h1>
+  </div>
+</div>
+
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <!-- Search -->
+  <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+    <%= form_with(url: public_site_foi_track_path(@site.slug), method: :get, class: "flex gap-3") do %>
+      <%= text_field_tag :tracking, params[:tracking], placeholder: "Enter your tracking number", class: "flex-1 px-4 py-3 border border-gray-300 rounded-lg" %>
+      <%= submit_tag "Track", class: "px-6 py-3 bg-blue-800 text-white font-bold rounded-lg cursor-pointer hover:bg-blue-900" %>
+    <% end %>
+  </div>
+
+  <% if @foi_request %>
+    <!-- Result -->
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="bg-blue-900 text-white p-5">
+        <div class="flex justify-between items-center">
+          <div>
+            <p class="text-xs text-blue-300">Tracking Number</p>
+            <p class="font-mono font-bold text-lg"><%= @foi_request.tracking_number %></p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-bold <%= @foi_request.status_badge_color %>">
+            <%= @foi_request.status.upcase %>
+          </span>
+        </div>
+      </div>
+
+      <div class="p-5 space-y-4">
+        <!-- Timeline -->
+        <div class="space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm <%= @foi_request.received? || @foi_request.processing? || @foi_request.released? ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400' %>">✓</div>
+            <div>
+              <p class="font-medium text-sm">Received</p>
+              <p class="text-xs text-gray-400"><%= @foi_request.received_at&.strftime("%B %d, %Y at %I:%M %p") %></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm <%= @foi_request.processing? || @foi_request.released? ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400' %>"><%= @foi_request.processing? || @foi_request.released? ? '✓' : '○' %></div>
+            <div>
+              <p class="font-medium text-sm">Processing</p>
+              <% if @foi_request.processed_at %><p class="text-xs text-gray-400"><%= @foi_request.processed_at.strftime("%B %d, %Y at %I:%M %p") %></p><% end %>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm <%= @foi_request.released? ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400' %>"><%= @foi_request.released? ? '✓' : '○' %></div>
+            <div>
+              <p class="font-medium text-sm">Released</p>
+              <% if @foi_request.released_at %><p class="text-xs text-gray-400"><%= @foi_request.released_at.strftime("%B %d, %Y at %I:%M %p") %></p><% end %>
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <p class="text-xs text-gray-500 uppercase font-bold">Requestor</p>
+            <p><%= @foi_request.name %></p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 uppercase font-bold">Purpose</p>
+            <p><%= @foi_request.purpose %></p>
+          </div>
+        </div>
+
+        <div class="text-sm">
+          <p class="text-xs text-gray-500 uppercase font-bold mb-1">Description</p>
+          <p class="text-gray-600"><%= @foi_request.description %></p>
+        </div>
+
+        <% if @foi_request.admin_notes.present? %>
+          <div class="bg-blue-50 rounded-lg p-4 text-sm">
+            <p class="text-xs text-blue-800 uppercase font-bold mb-1">Response from Barangay</p>
+            <p class="text-blue-700"><%= @foi_request.admin_notes %></p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% elsif params[:tracking].present? %>
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
+      <p class="text-yellow-800 font-medium">No request found with tracking number: <%= params[:tracking] %></p>
+      <p class="text-yellow-600 text-sm mt-2">Please check your tracking number and try again.</p>
+    </div>
+  <% end %>
+
+  <div class="text-center mt-6">
+    <%= link_to "← Back to FOI", public_site_foi_path(@site.slug), class: "text-sm text-blue-600 hover:underline" %>
+  </div>
+</div>

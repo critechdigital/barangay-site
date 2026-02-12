@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for?(:title) ? yield(:title) : "#{@site.name} — Official Website" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+<body class="min-h-screen bg-white text-gray-900">
+  <!-- Government Header Bar -->
+  <div class="bg-blue-900 text-white text-xs py-1">
+    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+      <span>Republic of the Philippines</span>
+      <span class="hidden md:inline"><%= [@site.municipality, @site.province, @site.region].compact_blank.join(" · ") %></span>
+    </div>
+  </div>
+
+  <!-- Official Site Header -->
+  <header class="bg-white border-b-4 border-blue-800">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center gap-4">
+      <% if @site.logo.present? %>
+        <img src="<%= @site.logo %>" alt="<%= @site.name %> Seal" class="w-16 h-16 rounded-full">
+      <% else %>
+        <!-- Default Government Seal Placeholder -->
+        <div class="w-16 h-16 rounded-full bg-blue-800 flex items-center justify-center text-white font-bold text-xs text-center leading-tight p-1">
+          <span>BRGY<br>SEAL</span>
+        </div>
+      <% end %>
+      <div>
+        <p class="text-xs text-gray-500 uppercase tracking-wider">Official Website</p>
+        <h1 class="text-xl md:text-2xl font-bold text-blue-900"><%= @site.name %></h1>
+        <p class="text-sm text-gray-500"><%= [@site.municipality, @site.province].compact_blank.join(", ") %></p>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-blue-800 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex overflow-x-auto gap-1 -mb-px">
+        <%= public_nav_link "Home", public_site_path(@site.slug) %>
+        <%= public_nav_link "Services", public_site_services_path(@site.slug) %>
+        <%= public_nav_link "Citizen's Charter", public_site_charter_path(@site.slug) %>
+        <%= public_nav_link "Officials", public_site_officials_path(@site.slug) %>
+        <%= public_nav_link "Transparency", public_site_transparency_path(@site.slug) %>
+        <%= public_nav_link "Documents", public_site_documents_path(@site.slug) %>
+        <%= public_nav_link "Announcements", public_site_announcements_path(@site.slug) %>
+        <%= public_nav_link "FOI", public_site_foi_path(@site.slug) %>
+        <%= public_nav_link "Contact", public_site_contact_path(@site.slug) %>
+      </div>
+    </div>
+  </nav>
+
+  <% if flash[:notice] %>
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4" role="alert">
+      <div class="max-w-6xl mx-auto px-4"><%= flash[:notice] %></div>
+    </div>
+  <% end %>
+  <% if flash[:alert] %>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert">
+      <div class="max-w-6xl mx-auto px-4"><%= flash[:alert] %></div>
+    </div>
+  <% end %>
+
+  <main>
+    <%= yield %>
+  </main>
+
+  <!-- Emergency Hotlines Bar -->
+  <% if @site.emergency_contacts.any? %>
+  <section class="bg-red-800 text-white py-4">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center gap-4 overflow-x-auto">
+        <span class="font-bold text-sm whitespace-nowrap">🚨 EMERGENCY:</span>
+        <% @site.emergency_contacts.limit(5).each do |ec| %>
+          <span class="text-sm whitespace-nowrap"><%= ec.name %>: <strong><%= ec.phone %></strong></span>
+          <span class="text-red-400">|</span>
+        <% end %>
+        <%= link_to "All Hotlines →", public_site_emergency_path(@site.slug), class: "text-sm underline whitespace-nowrap" %>
+      </div>
+    </div>
+  </section>
+  <% end %>
+
+  <!-- Official Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-10">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <h3 class="text-white font-bold mb-3">About</h3>
+          <p class="text-sm"><%= @site.name %> is a barangay under the jurisdiction of <%= [@site.municipality, @site.province].compact_blank.join(", ") %>.</p>
+          <p class="text-sm mt-2"><%= @site.tagline %></p>
+        </div>
+        <div>
+          <h3 class="text-white font-bold mb-3">Quick Links</h3>
+          <ul class="text-sm space-y-1">
+            <li><%= link_to "Citizen's Charter", public_site_charter_path(@site.slug), class: "hover:text-white" %></li>
+            <li><%= link_to "Transparency Seal", public_site_transparency_path(@site.slug), class: "hover:text-white" %></li>
+            <li><%= link_to "FOI Requests", public_site_foi_path(@site.slug), class: "hover:text-white" %></li>
+            <li><%= link_to "Documents & Forms", public_site_documents_path(@site.slug), class: "hover:text-white" %></li>
+            <li><%= link_to "Emergency Hotlines", public_site_emergency_path(@site.slug), class: "hover:text-white" %></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-white font-bold mb-3">Contact</h3>
+          <div class="text-sm space-y-1">
+            <% if @site.address.present? %><p>📍 <%= @site.address %></p><% end %>
+            <% if @site.phone.present? %><p>📞 <%= @site.phone %></p><% end %>
+            <% if @site.email.present? %><p>📧 <%= @site.email %></p><% end %>
+            <% if @site.office_hours.present? %><p>🕐 <%= @site.office_hours %></p><% end %>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center text-xs">
+        <p>&copy; <%= Date.current.year %> <%= @site.name %>. All rights reserved.</p>
+        <p class="mt-2 md:mt-0">Powered by <a href="/" class="text-blue-400 hover:underline">BarangaySite</a> — A CriTech Digital Product</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

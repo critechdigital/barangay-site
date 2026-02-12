@@ -1,0 +1,13 @@
+budget:
+  site: san_antonio
+  title: Annual Budget 2026
+  category: Budget Documents
+  published: true
+  sort_order: 0
+
+form:
+  site: san_antonio
+  title: Clearance Application Form
+  category: Downloadable Forms
+  published: true
+  sort_order: 1

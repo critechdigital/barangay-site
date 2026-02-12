@@ -1,0 +1,13 @@
+step1:
+  service: clearance
+  step_number: 1
+  title: Go to information desk
+  responsible_person: Info Officer
+  location: Ground Floor
+  duration: "2 minutes"
+
+step2:
+  service: clearance
+  step_number: 2
+  title: Fill out form
+  duration: "5 minutes"

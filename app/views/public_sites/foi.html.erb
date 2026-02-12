@@ -1,0 +1,99 @@
+<% content_for(:title) { "Freedom of Information — #{@site.name}" } %>
+
+<div class="bg-blue-50 border-b border-blue-100 py-6">
+  <div class="max-w-6xl mx-auto px-4">
+    <h1 class="text-2xl font-bold text-blue-900">Freedom of Information (FOI)</h1>
+    <p class="text-gray-600 mt-1">In compliance with <strong>Executive Order No. 2, s. 2016</strong> — Operationalizing the People's Constitutional Right to Information</p>
+  </div>
+</div>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="grid md:grid-cols-3 gap-8">
+    <!-- Request Form -->
+    <div class="md:col-span-2">
+      <div class="bg-white border border-gray-200 rounded-lg p-6">
+        <h2 class="font-bold text-lg text-blue-900 mb-4">Submit an FOI Request</h2>
+        <p class="text-sm text-gray-500 mb-6">Request access to official records and documents from <%= @site.name %>. You will receive a tracking number upon submission.</p>
+
+        <% @foi_request ||= FoiRequest.new %>
+        <%= form_with(model: @foi_request, url: public_site_foi_path(@site.slug), method: :post, class: "space-y-4") do |f| %>
+          <% if @foi_request.errors.any? %>
+            <div class="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-600">
+              <% @foi_request.errors.full_messages.each do |msg| %>
+                <p><%= msg %></p>
+              <% end %>
+            </div>
+          <% end %>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= f.label :name, "Full Name *", class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= f.text_field :name, placeholder: "Juan Dela Cruz", class: "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" %>
+            </div>
+            <div>
+              <%= f.label :email, "Email Address *", class: "block text-sm font-medium text-gray-700 mb-1" %>
+              <%= f.email_field :email, placeholder: "you@email.com", class: "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" %>
+            </div>
+          </div>
+
+          <div>
+            <%= f.label :purpose, "Purpose of Request *", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= f.select :purpose, options_for_select([
+              "Academic / Research",
+              "Journalism / Media",
+              "Personal / Individual",
+              "Business / Commercial",
+              "Legal / Judicial",
+              "Government / Official",
+              "Other"
+            ]), { include_blank: "Select purpose" }, class: "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" %>
+          </div>
+
+          <div>
+            <%= f.label :description, "Description of Information Requested *", class: "block text-sm font-medium text-gray-700 mb-1" %>
+            <%= f.text_area :description, rows: 5, placeholder: "Please describe the specific information or documents you are requesting...", class: "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" %>
+          </div>
+
+          <%= f.submit "Submit FOI Request", class: "w-full py-3 bg-blue-800 text-white font-bold rounded-lg hover:bg-blue-900 cursor-pointer text-sm" %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+      <!-- Track Request -->
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 class="font-bold text-sm text-blue-900 mb-3">📋 Track Your Request</h3>
+        <%= form_with(url: public_site_foi_track_path(@site.slug), method: :get, class: "space-y-3") do %>
+          <div>
+            <%= text_field_tag :tracking, nil, placeholder: "FOI-XXXX-XXXXXXXX-XXXXXX", class: "w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" %>
+          </div>
+          <%= submit_tag "Track Request", class: "w-full py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 cursor-pointer text-sm" %>
+        <% end %>
+      </div>
+
+      <!-- Info Box -->
+      <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-5">
+        <h3 class="font-bold text-sm text-yellow-800 mb-2">ℹ️ Processing Timeline</h3>
+        <ul class="text-xs text-yellow-700 space-y-2">
+          <li><strong>Simple requests:</strong> 15 working days</li>
+          <li><strong>Complex requests:</strong> 20 working days (extendable by 20 days)</li>
+          <li>You will be notified via email about the status of your request.</li>
+        </ul>
+      </div>
+
+      <!-- What can be requested -->
+      <div class="bg-white border border-gray-200 rounded-lg p-5">
+        <h3 class="font-bold text-sm text-blue-900 mb-2">What can you request?</h3>
+        <ul class="text-xs text-gray-600 space-y-1">
+          <li>• Budget and financial reports</li>
+          <li>• Barangay ordinances and resolutions</li>
+          <li>• Procurement records</li>
+          <li>• Project implementation reports</li>
+          <li>• Meeting minutes</li>
+          <li>• Any public record</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

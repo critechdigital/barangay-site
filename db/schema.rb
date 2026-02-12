@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_12_045207) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_12_073153) do
   create_table "announcements", force: :cascade do |t|
     t.text "body"
     t.datetime "created_at", null: false
@@ -21,6 +21,47 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_12_045207) do
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["site_id"], name: "index_announcements_on_site_id"
+  end
+
+  create_table "documents", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "file_url"
+    t.boolean "published"
+    t.integer "site_id", null: false
+    t.integer "sort_order"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.index ["site_id"], name: "index_documents_on_site_id"
+  end
+
+  create_table "emergency_contacts", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.string "phone"
+    t.integer "site_id", null: false
+    t.integer "sort_order"
+    t.datetime "updated_at", null: false
+    t.index ["site_id"], name: "index_emergency_contacts_on_site_id"
+  end
+
+  create_table "foi_requests", force: :cascade do |t|
+    t.text "admin_notes"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "email"
+    t.string "name"
+    t.datetime "processed_at"
+    t.text "purpose"
+    t.datetime "received_at"
+    t.datetime "released_at"
+    t.integer "site_id", null: false
+    t.integer "status"
+    t.string "tracking_number"
+    t.datetime "updated_at", null: false
+    t.index ["site_id"], name: "index_foi_requests_on_site_id"
   end
 
   create_table "officials", force: :cascade do |t|
@@ -45,6 +86,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_12_045207) do
     t.string "title"
     t.datetime "updated_at", null: false
     t.index ["site_id"], name: "index_pages_on_site_id"
+  end
+
+  create_table "service_steps", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.string "duration"
+    t.string "fees"
+    t.string "location"
+    t.text "notes"
+    t.string "responsible_person"
+    t.integer "service_id", null: false
+    t.integer "step_number"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.index ["service_id"], name: "index_service_steps_on_service_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -100,8 +156,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_12_045207) do
   end
 
   add_foreign_key "announcements", "sites"
+  add_foreign_key "documents", "sites"
+  add_foreign_key "emergency_contacts", "sites"
+  add_foreign_key "foi_requests", "sites"
   add_foreign_key "officials", "sites"
   add_foreign_key "pages", "sites"
+  add_foreign_key "service_steps", "services"
   add_foreign_key "services", "sites"
   add_foreign_key "sites", "users"
 end
